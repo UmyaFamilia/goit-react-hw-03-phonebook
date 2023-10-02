@@ -1,0 +1,33 @@
+componentDidUpdate(prevProps, prevState) {
+    if (prevState.query !== this.state.query) {
+      this.setState({
+        loader: true,
+      });
+      this.requestForNewQuery(this.state.query, 1);
+    } else if (
+      prevState.query === this.state.query &&
+      prevState.page !== this.state.page &&
+      this.state.page !== 1
+    ) {
+      this.requestForNewPage(this.state.query, this.state.page);
+    }
+  }
+  requestForNewPage = (query, page) => {
+    request(query, page).then(galerry =>
+      this.setState(prev => ({
+        array: [...prev.array, ...galerry.hits],
+        forButtonloader: true,
+      }))
+    );
+  };
+  requestForNewQuery = (query, page) => {
+    request(query, page).then(galerry =>
+      this.setState(prev => ({
+        array: [...galerry.hits],
+        forButtonloader: true,
+        page: 1,
+        loader: false,
+      }))
+    );
+  };
+

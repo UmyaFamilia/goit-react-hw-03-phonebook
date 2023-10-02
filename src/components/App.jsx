@@ -9,6 +9,18 @@ export class App extends Component {
     contacts: [],
     filter: '',
   };
+  componentDidUpdate(_, prevState) {
+    if (this.state.contacts.length !== prevState.contacts.length) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+  componentDidMount() {
+    if (localStorage.getItem('contacts')) {
+      this.setState({
+        contacts: JSON.parse(localStorage.getItem('contacts')),
+      });
+    }
+  }
   addToFilter = word => {
     this.setState(prev => ({
       filter: word,
